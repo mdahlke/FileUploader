@@ -55,6 +55,9 @@ class ImageUploader {
 	private $smallImageHeight				= 500;
 	private $thumbImageWidth				= 200;
 	private $thumbImageHeight				= 200;
+	private $fullImageQuality				= 90;
+	private $smallImageQuality				= 75;
+	private $thumbImageQuality				= 65;
 	private $prependToFileName				= "";
 	private $numberOfFilesPerDirectory		= 100;
 	private $numberOfAllowedImagesToUpload	= 1;
@@ -169,6 +172,27 @@ class ImageUploader {
 	}
 	public function setThumbImageHeight($input){
 		$this->thumbImageHeight = $input;
+	}
+	
+	public function getFullImageQuality(){
+		return $this->fullImageQuality;
+	}
+	public function setFullImageQuality($input){
+		$this->fullImageQuality = $input;
+	}
+	
+	public function getSmallImageQuality(){
+		return $this->smallImageQuality;
+	}
+	public function setSmallImageQuality($input){
+		$this->smallImageQuality = $input;
+	}
+	
+	public function getThumbImageQuality(){
+		return $this->thumbImageQuality;
+	}
+	public function setThumbImageQuality($input){
+		$this->thumbImageQuality = $input;
 	}
 	
 	public function getPrependToFileName(){
@@ -630,14 +654,83 @@ class ImageUploader {
 
 				// Send the Images to the correct place
 				if($imageType === $this::GIF && self::$allowGIFImages){
-					imagegif($tmp, $directoryFull.$this->getFileNameFullAtIndex($u));
-					imagegif($tmp, $directorySmall.$this->getFileNameSmallAtIndex($u));
-					imagegif($tmp, $directoryThumb.$this->getFileNameSmallAtIndex($u));
+					try {
+						if(!imagegif($tmp, $directoryFull.$this->getFileNameFullAtIndex($u))){
+							throw new Exception('Could not create "imagegif". 
+												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
+												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1003);
+						}
+					}
+					catch(Exception $e) {
+						$this->allUploadErrorMessages[] = $e->getMessage();
+						$this->allUploadErrorCodes[] = $e->getCode();
+						echo $e->getMessage();
+					}
+					
+					try {
+						if(!imagegif($tmp, $directorySmall.$this->getFileNameSmallAtIndex($u))){
+							throw new Exception('Could not create "imagegif". 
+												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
+												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1003);
+						}
+					}
+					catch(Exception $e){
+						$this->allUploadErrorMessages[] = $e->getMessage();
+						$this->allUploadErrorCodes[] = $e->getCode();
+						echo $e->getMessage();
+					}
+					try {
+						if(!imagegif($tmp, $directoryThumb.$this->getFileNameSmallAtIndex($u))){
+							throw new Exception('Could not create "imagegif". 
+												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
+												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1003);
+						}
+					}
+					catch(Exception $e){
+						$this->allUploadErrorMessages[] = $e->getMessage();
+						$this->allUploadErrorCodes[] = $e->getCode();
+						echo $e->getMessage();
+					}
 				}
 				elseif($imageType === $this::JPG || $imageType === $this::PNG){
-					imagejpeg($tmp,$directoryFull.$this->getFileNameFullAtIndex($u),90);
-					imagejpeg($tmp1,$directorySmall.$this->getFileNameSmallAtIndex($u),80);
-					imagejpeg($tmp2,$directoryThumb.$this->getFileNameThumbAtIndex($u),70);
+					try {
+						if(!imagejpeg($tmp,$directoryFull.$this->getFileNameFullAtIndex($u), $this->getFullImageQuality())){
+							throw new Exception('Could not create "imagejpeg". 
+												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
+												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1004);
+						}
+					}
+					catch(Exception $e){
+						$this->allUploadErrorMessages[] = $e->getMessage();
+						$this->allUploadErrorCodes[] = $e->getCode();
+						echo $e->getMessage();
+					}
+					
+					try {
+						if(!imagejpeg($tmp1,$directorySmall.$this->getFileNameSmallAtIndex($u), $this->getSmallImageQuality())){
+							throw new Exception('Could not create "imagejpeg". 
+												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
+												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1004);
+						}
+					}
+					catch(Exception $e){
+						$this->allUploadErrorMessages[] = $e->getMessage();
+						$this->allUploadErrorCodes[] = $e->getCode();
+						echo $e->getMessage();
+					}
+					
+					try {
+						if(!imagejpeg($tmp2,$directoryThumb.$this->getFileNameThumbAtIndex($u), $this->getThumbImageQuality())){
+							throw new Exception('Could not create "imagejpeg". 
+												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
+												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1004);
+						}
+					}
+					catch(Exception $e){
+						$this->allUploadErrorMessages[] = $e->getMessage();
+						$this->allUploadErrorCodes[] = $e->getCode();
+						echo $e->getMessage();
+					}
 				}
 				// Destroy temporary images
 				imagedestroy($src);
