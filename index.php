@@ -2,7 +2,7 @@
 
 	if(isset($_POST['tenImageSubmit'])){
 		
-		require 'ImageUploader.php';
+		require 'ImageUploader.class.php';
 		
 		$uploader = new ImageUploader();
 
