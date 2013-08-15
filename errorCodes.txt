@@ -1,0 +1,20 @@
+/*
+ * Error code dictionary for Exception handling
+ */
+
+1000 - 
+1001 - File is not an image so it was not uploaded
+1002 - File is too large
+1003 - Image is empty (no image selected to upload; more of a warning than an error);
+1003 - Image upload failed @ imagegif()
+1004 - Image upload failed @ imagejpeg()
+
+
+2001 - Failed to make directory
+
+3001 - Input name is not an array (<input type='file' name='image[]'/>);
+
+4001 - File does not exist
+4002 - File could not be opened
+4003 - File could not be locked
+4004 - Could not write to file
