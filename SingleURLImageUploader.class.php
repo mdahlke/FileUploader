@@ -10,6 +10,8 @@
  *
  * @author Michael
  */
+
+require ('ImageUploader.class.php');
 class SingleURLImageUploader extends ImageUploader {
 
 	public function uploadSingleURLImage($file){
@@ -34,6 +36,7 @@ class SingleURLImageUploader extends ImageUploader {
 			$this->allUploadErrorMessages[] = $e->getMessage();
 			$this->allUploadErrorCodes[] = $e->getCode();
 			$this->allUploadErrorsLineNumber[] = $e->getLine();
+			$this->allUploadErrorsFileName[] = $e->getFile();
 			$continueWithUpload = false;
 		}
 
@@ -74,6 +77,7 @@ class SingleURLImageUploader extends ImageUploader {
 				$this->allUploadErrorMessages[] = $e->getMessage();
 				$this->allUploadErrorCodes[] = $e->getCode();
 				$this->allUploadErrorsLineNumber[] = $e->getLine();
+				$this->allUploadErrorsFileName[] = $e->getFile();
 			}
 
 			$smallWidth = $this->getSmallImageWidth();
@@ -190,6 +194,7 @@ class SingleURLImageUploader extends ImageUploader {
 				$this->allUploadErrorMessages[] = $e->getMessage();
 				$this->allUploadErrorCodes[] = $e->getCode();
 				$this->allUploadErrorsLineNumber[] = $e->getLine();
+				$this->allUploadErrorsFileName[] = $e->getFile();
 			}
 			try {
 				$this->setFileNameThumb($thumbImageWidth."x".$thumbImageHeight."_".$fullFileName);
@@ -198,6 +203,7 @@ class SingleURLImageUploader extends ImageUploader {
 				$this->allUploadErrorMessages[] = $e->getMessage();
 				$this->allUploadErrorCodes[] = $e->getCode();
 				$this->allUploadErrorsLineNumber[] = $e->getLine();
+				$this->allUploadErrorsFileName[] = $e->getFile();
 			}
 
 			// Send the Images to the correct place
@@ -214,6 +220,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 
 				try {
@@ -227,6 +234,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 				try {
 					if(!imagegif($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameSmallAtIndex(0))){
@@ -239,6 +247,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 			}
 			else if($imageType === $this::PNG){
@@ -254,6 +263,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 
 				try {
@@ -267,6 +277,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 				try {
 					if(!imagepng($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameSmallAtIndex(0), $this->getThumbImageQuality($imageType))){
@@ -279,6 +290,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 			}
 			else if(($imageType === $this::GIF  || $imageType === $this::PNG) && !self::$allowGIFImages){
@@ -293,6 +305,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 
 				try {
@@ -306,6 +319,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 				try {
 					if(!imagepng($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameSmallAtIndex(0))){
@@ -318,6 +332,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 			}
 			elseif($imageType === $this::JPG){
@@ -332,6 +347,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 
 				try {
@@ -345,6 +361,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 
 				try {
@@ -358,6 +375,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorMessages[] = $e->getMessage();
 					$this->allUploadErrorCodes[] = $e->getCode();
 					$this->allUploadErrorsLineNumber[] = $e->getLine();
+					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 			}
 			// Destroy temporary images

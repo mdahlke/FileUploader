@@ -1,16 +1,14 @@
 <?php
 
-require '../db.php';
-
 if(isset($_POST['submitForm'])){
-	require 'ImageUploader.class.php';
+	require 'UploadImage.class.php';
 	
-	$uploader = new ImageUploader();
+	$uploader = new UploadImage();
 	$uploader->setOriginalFilePath('formUpload/');
 	$uploader->setPrependToFileName('testingScript');
 	$uploader->setNumberOfAllowedImagesToUpload(20);
 	$uploader->setNumberOfFilesPerDirectory(20);
-	$uploader->uploadImage($_FILES['image']);
+	$uploader->upload($_FILES['image']);
 
 	if($uploader->getNumberOfErrorsDuringUpload() > 0){
 		echo $uploader->returnFormattedErrors();
@@ -21,8 +19,6 @@ if(isset($_POST['submitForm'])){
 	}
 }
 else if(isset($_POST['submitURL'])){
-	
-	require 'ImageUploader.class.php';
 	require 'SingleURLImageUploader.class.php';
 	
 	$uploader = new SingleURLImageUploader();
@@ -39,7 +35,6 @@ else if(isset($_POST['submitURL'])){
 		$uploader->echoAllFileNames();
 		$uploader->echoAllPathNames();
 	}
-
 
 }
 ?>
@@ -59,7 +54,7 @@ else if(isset($_POST['submitURL'])){
 			$numOfImagesToUpload = 20;
 			for($i = 0; $i < $numOfImagesToUpload; $i++){
 				echo "
-					<input type='file' name='image[]'/>
+					<input multiple='multiple' type='file' name='image[]' maxlength='6'/>
 				";
 			}
 		?>
