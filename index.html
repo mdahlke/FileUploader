@@ -53,7 +53,7 @@ if(isset($_POST['imageUpload'])){
 &lt;/head&gt;
 &lt;body&gt;
     &lt;form action='#' method='POST' enctype='multipart/form-data'&gt;
-        &lt;input type='file' name='image' multiple /&gt;
+        &lt;input type='file' name='image[]' multiple /&gt; &lt;!-- name='image[]' must be an array or the script will die and your files will not be uploaded --&gt;
         &lt;input type='submit' name='imageUpload' /&gt;
     &lt;/form&gt;
 &lt;/body&gt;
@@ -84,27 +84,58 @@ if(isset($_POST['urlUpload'])){
 &lt;/html&gt;
 </code></pre>
 
-<p>For the Demo page click <a href="ImageUploader/">HERE</a></p>
+<p>For an upload via HTML form with all the options.</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<pre><code>&lt;?php
+if(isset($_POST['imageUpload'])){
+    require 'ImageUpload.class.php';
+    $uploader = new ImageUploader();
+    $uploader-&gt;setOriginalFilePath('path/to/where/you/want/the/files') // this directory will be created if it does not already exist
+    $uploader-&gt;smallImageWidth(300);
+    $uploader-&gt;smallImageHeight(300); // either the height will be 300 or the width will be 300 depending on which is greater so we can maintain the aspect ratio
+    $uploader-&gt;thumbImageWidth(150);
+    $uploader-&gt;thumbImageHeight(150); // same as the smallImageHeight/Width regarding aspect ratio
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+/* 
+ * You may also use this to set small/thumb height/width
+    $uploader-&gt;setSmallImageWidthAndHeight(300, 300);
+    $uploader-&gt;setSmallImageWidthAndHeight(150, 150);
+*/
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+    $uploader-&gt;fullImageQuality(95);
+    $uploader-&gt;smallImageQuality(60);
+    $uploader-&gt;thumbImageQuality(50); // Image quality is for png/jpeg image types
+    $uploader-&gt;prependToFilename(cuteCats); // the filename is automatically generated so if you want to keep some organization to the filenames then you may do so using this. NOTE: the filesize will also be prepended to the small and thumb images
+    $uploader-&gt;numberOfFilesPerDirectory(1000); // once the limit is hit a new directory will be created to help with organization
+    $uploader-&gt;numberOfAllowedImagesToUpload(5); // how many images that can be uploaded at one (make sure your php.ini file will allow the number of uploads you set here)
+    $uploader-&gt;errorLogFileName('uploadErrorLog');
+    $uploader-&gt;inParentDirectory(true); // if true this will put the upload folders in a parent directory of where you're calling the script. This may have been a specific need for my application but I decided to leave it in there in case someone else may need it.
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+    $uploader-&gt;upload($_FILES['image']);
+}
+?&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Image Uploader&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form action='#' method='POST' enctype='multipart/form-data'&gt;
+        &lt;input type='file' name='image[]' multiple /&gt; &lt;!-- name='image[]' must be an array or the script will die and your files will not be uploaded --&gt;
+        &lt;input type='submit' name='imageUpload' /&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
 
 <h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>2013: <a href="https://github.com/mdahlke" class="user-mention">@mdahlke</a></p>
 
 <h3>
 <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Having trouble with ImageUploader? Check out the documentation at <a href="https://github.com/mdahlke/ImageUploader/wiki">https://github.com/mdahlke/ImageUploader/wiki</a> or email <a href="mailto:madahlke27@gmail.com">madahlke27@gmail.com</a>.</p>
 
 
         </article>
@@ -112,7 +143,7 @@ if(isset($_POST['urlUpload'])){
     </div>
     <footer>
       <div class="owner">
-      <p><a href="https://github.com/mdahlke" class="avatar"><img src="https://1.gravatar.com/avatar/954a127b1d97fc86c514bf9e306bf390?d=https%3A%2F%2Fidenticons.github.com%2F565eb244692c36a36c72868a6b8e2178.png&amp;s=30" width="48" height="48"/></a> <a href="https://github.com/mdahlke">mdahlke</a> maintains <a href="https://github.com/mdahlke/ImageUploader">Imageuploader</a></p>
+      <p><a href="https://github.com/mdahlke" class="avatar"><img src="https://2.gravatar.com/avatar/954a127b1d97fc86c514bf9e306bf390?d=https%3A%2F%2Fidenticons.github.com%2F565eb244692c36a36c72868a6b8e2178.png&amp;s=30" width="48" height="48"/></a> <a href="https://github.com/mdahlke">mdahlke</a> maintains <a href="https://github.com/mdahlke/ImageUploader">Imageuploader</a></p>
 
 
       </div>
