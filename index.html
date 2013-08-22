@@ -60,7 +60,31 @@ if(isset($_POST['imageUpload'])){
 &lt;/html&gt;
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>For a basic URL image upload.</p>
+
+<pre><code>&lt;?php
+if(isset($_POST['urlUpload'])){
+    require 'SingleURLImageUploader.class.php';
+    $url = $_POST['url'];
+
+    $uploader = new SingleURLImageUploader();
+    $uploader-&gt;uploadSingleURLImage($url);
+}
+?&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Image Uploader&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form action='#' method='POST' enctype='multipart/form-data'&gt;
+        &lt;input type='text' name='url' multiple /&gt;
+        &lt;input type='submit' name='urlUpload' /&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>For the Demo page click <a href="ImageUploader/">HERE</a></p>
 
 <h3>
 <a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
@@ -81,6 +105,8 @@ if(isset($_POST['imageUpload'])){
 <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
 <p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+
+
         </article>
       </div>
     </div>
