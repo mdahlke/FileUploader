@@ -1,41 +1,36 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Imageuploader by mdahlke</title>
+  </head>
 
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
-
-  <title>Imageuploader</title>
-  <meta name="description" content="Upload one or many images via form or through a URL">
-
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-
-</head>
-
-<body>
-
-  <div class="wrapper">
-    <header>
-      <h1 class="title">Imageuploader</h1>
-    </header>
+  <body>
     <div id="container">
-      <p class="tagline">Upload one or many images via form or through a URL</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/mdahlke/ImageUploader/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/mdahlke/ImageUploader/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/mdahlke/ImageUploader" class="code">View Imageuploader on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
+      <div class="inner">
+
+        <header>
+          <h1>Imageuploader</h1>
+          <h2>Upload one or many images via form or through a URL</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/mdahlke/ImageUploader/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/mdahlke/ImageUploader/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/mdahlke/ImageUploader" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
           <h1>
 <a name="php-image-uploader-now-supports-uploading-of-audio-files" class="anchor" href="#php-image-uploader-now-supports-uploading-of-audio-files"><span class="octicon octicon-link"></span></a>PHP Image Uploader now supports uploading of audio files!</h1>
 
@@ -44,7 +39,7 @@
 <p>PHP Image Uploader was created to make image uploading easy. I've seen a few uploading scripts that work pretty well, but they can be a pain to try and get them to work correctly. With ImageUploader you can be uploading images with a few lines of PHP and a simple HTML form!</p>
 
 <h3>
-<a name="for-the-a-minimal-implementation-using-an-html-form" class="anchor" href="#for-the-a-minimal-implementation-using-an-html-form"><span class="octicon octicon-link"></span></a>For the a minimal implementation using an HTML form.</h3>
+<a name="for-a-minimal-implementation-using-an-html-form" class="anchor" href="#for-a-minimal-implementation-using-an-html-form"><span class="octicon octicon-link"></span></a>For a minimal implementation using an HTML form.</h3>
 
 <pre><code>&lt;?php
 if(isset($_POST['imageUpload'])){
@@ -213,27 +208,14 @@ if(isset($_POST['imageUpload'])){
 <p>Having trouble with ImageUploader? Check out the documentation at <a href="https://github.com/mdahlke/ImageUploader/wiki">https://github.com/mdahlke/ImageUploader/wiki</a> or email <a href="mailto:madahlke27@gmail.com">madahlke27@gmail.com</a>.</p>
 
 
-        </article>
-      </div>
-    </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/mdahlke" class="avatar"><img src="https://0.gravatar.com/avatar/954a127b1d97fc86c514bf9e306bf390?d=https%3A%2F%2Fidenticons.github.com%2F565eb244692c36a36c72868a6b8e2178.png&amp;s=30" width="48" height="48"/></a> <a href="https://github.com/mdahlke">mdahlke</a> maintains <a href="https://github.com/mdahlke/ImageUploader">Imageuploader</a></p>
+        </section>
 
+        <footer>
+          Imageuploader is maintained by <a href="https://github.com/mdahlke">mdahlke</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
 
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/mdahlke/ImageUploader/tarball/master" class="tar">tar</a><a href="https://github.com/mdahlke/ImageUploader/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
-
-            <script type="text/javascript">
+                  <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -244,5 +226,7 @@ if(isset($_POST['imageUpload'])){
             } catch(err) {}
           </script>
 
-</body>
+      </div>
+    </div>
+  </body>
 </html>
