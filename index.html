@@ -36,15 +36,28 @@
         <span class="blc"></span><span class="trc"></span>
         </div>
         <article class="markdown-body">
-          <p>Php Image Uploader was created to make image uploading easy. I've seen a few uploading scripts that work pretty well, but they can be a pain to try and get them to work correctly. With ImageUploader you can be uploading images with a few lines of PHP and a simple HTML form!</p>
+          <h1>
+<a name="php-image-uploader-now-supports-uploading-of-audio-files" class="anchor" href="#php-image-uploader-now-supports-uploading-of-audio-files"><span class="octicon octicon-link"></span></a>PHP Image Uploader now supports uploading of audio files!</h1>
 
-<p>For the a minimal implementation using an HTML form.</p>
+<p>The best part is it's just as easy to upload audio files as it is images (and no need to worry about changing your HTML because implementation has not changed a bit!).</p>
+
+<p>PHP Image Uploader was created to make image uploading easy. I've seen a few uploading scripts that work pretty well, but they can be a pain to try and get them to work correctly. With ImageUploader you can be uploading images with a few lines of PHP and a simple HTML form!</p>
+
+<h3>
+<a name="for-the-a-minimal-implementation-using-an-html-form" class="anchor" href="#for-the-a-minimal-implementation-using-an-html-form"><span class="octicon octicon-link"></span></a>For the a minimal implementation using an HTML form.</h3>
 
 <pre><code>&lt;?php
 if(isset($_POST['imageUpload'])){
-    require 'ImageUpload.class.php';
-    $uploader = new ImageUploader();
-    $uploader-&gt;upload($_FILES['image']);
+        $imageUploader = new UploadImage();
+    $imageUploader-&gt;upload($_FILES['image']);
+
+    if($imageUploader-&gt;getNumberOfErrorsDuringUpload() &gt; 0){
+        echo '&lt;pre&gt;'.$imageUploader-&gt;returnFormattedErrors().'&lt;/pre&gt;';
+    }
+
+    for($i = 0; $i &lt; $imageUploader-&gt;getNumberOfSuccessfulUploads(); $i++){
+        echo '&lt;img src="'.$imageUploader-&gt;getFilePathThumbAtIndex($i).$imageUploader-&gt;getFileNameThumbAtIndex($i).'"/&gt;';
+    }
 }
 ?&gt;
 &lt;html&gt;
@@ -60,15 +73,23 @@ if(isset($_POST['imageUpload'])){
 &lt;/html&gt;
 </code></pre>
 
-<p>For a basic URL image upload.</p>
+<h3>
+<a name="for-a-basic-url-image-upload" class="anchor" href="#for-a-basic-url-image-upload"><span class="octicon octicon-link"></span></a>For a basic URL image upload.</h3>
 
 <pre><code>&lt;?php
 if(isset($_POST['urlUpload'])){
-    require 'SingleURLImageUploader.class.php';
-    $url = $_POST['url'];
+    require 'classes/SingleURLImageUploader.class.php';
 
-    $uploader = new SingleURLImageUploader();
-    $uploader-&gt;uploadSingleURLImage($url);
+    $URLUploader = new SingleURLImageUploader();
+    $URLUploader-&gt;uploadSingleURLImage($_POST['url']);
+
+    if($URLUploader-&gt;getNumberOfErrorsDuringUpload() &gt; 0){
+        echo '&lt;pre&gt;'.$URLUploader-&gt;returnFormattedErrors().'&lt;/pre&gt;';
+    }
+
+    for($i = 0; $i &lt; $URLUploader-&gt;getNumberOfSuccessfulUploads(); $i++){
+        echo '&lt;img src="'.$URLUploader-&gt;getFilePathThumbAtIndex($i).$URLUploader-&gt;getFileNameThumbAtIndex($i).'"/&gt;';
+    }
 }
 ?&gt;
 &lt;html&gt;
@@ -84,12 +105,66 @@ if(isset($_POST['urlUpload'])){
 &lt;/html&gt;
 </code></pre>
 
-<p>For an upload via HTML form with all the options.</p>
+<h3>
+<a name="for-basic-audio-upload" class="anchor" href="#for-basic-audio-upload"><span class="octicon octicon-link"></span></a>For basic audio upload.</h3>
+
+<pre><code>&lt;?php
+    if(isset($_POST['submitAudio'])){
+    require 'classes/UploadAudio.class.php';
+
+    if(!empty($_POST['newDirectory'])){
+        $directory = $_POST['newDirectory'];
+    }
+    else {
+        $directory = 'AudioUpload/';
+    }
+
+    $audioUploader = new UploadAudio();
+    $audioUploader-&gt;setOriginalFilePath($directory);
+    $audioUploader-&gt;upload($_FILES['audio']);
+
+    if($audioUploader-&gt;getNumberOfErrorsDuringUpload() &gt; 0){
+        echo '&lt;pre&gt;'.$audioUploader-&gt;returnFormattedErrors().'&lt;/pre&gt;';
+    }
+
+    for($i = 0; $i &lt; $audioUploader-&gt;getNumberOfSuccessfulUploads(); $i++){
+        echo 
+            $audioUploader-&gt;getFileNameAtIndex($i)
+            ."  &lt;br /&gt;
+            &lt;audio style='display:block;' controls src='".$audioUploader-&gt;getFilePathAtIndex($i).$audioUploader-&gt;getFileNameAtIndex($i)."' type='".$audioUploader-&gt;getFullFileTypeAtIndex($i)."'&gt;
+                Your browser does not support HTML audio
+            &lt;/audio&gt;
+        ";
+    }
+
+    }
+?&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Audio Uploader&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;form action="" method="post" enctype="multipart/form-data"&gt;
+        &lt;h3&gt;&lt;label for="image"&gt;Select Audio:&lt;/label&gt;&lt;/h3&gt;
+
+        &lt;input type='file' name='audio[]' multiple/&gt;
+        &lt;br /&gt;
+        &lt;label&gt;Create new directory (ex. audio/playlists/Eminem/)&lt;/label&gt;
+        &lt;input type="text" name="newDirectory" /&gt;
+
+        &lt;input type="submit" name="submitAudio" value="UploadAudio"/&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h3>
+<a name="for-an-upload-via-html-form-with-all-the-options" class="anchor" href="#for-an-upload-via-html-form-with-all-the-options"><span class="octicon octicon-link"></span></a>For an upload via HTML form with all the options.</h3>
 
 <pre><code>&lt;?php
 if(isset($_POST['imageUpload'])){
-    require 'ImageUpload.class.php';
-    $uploader = new ImageUploader();
+    require 'classes/UploadImage.class.php';
+    $uploader = new UploadImage();
     $uploader-&gt;setOriginalFilePath('path/to/where/you/want/the/files') // this directory will be created if it does not already exist
     $uploader-&gt;smallImageWidth(300);
     $uploader-&gt;smallImageHeight(300); // either the height will be 300 or the width will be 300 depending on which is greater so we can maintain the aspect ratio
@@ -143,7 +218,7 @@ if(isset($_POST['imageUpload'])){
     </div>
     <footer>
       <div class="owner">
-      <p><a href="https://github.com/mdahlke" class="avatar"><img src="https://2.gravatar.com/avatar/954a127b1d97fc86c514bf9e306bf390?d=https%3A%2F%2Fidenticons.github.com%2F565eb244692c36a36c72868a6b8e2178.png&amp;s=30" width="48" height="48"/></a> <a href="https://github.com/mdahlke">mdahlke</a> maintains <a href="https://github.com/mdahlke/ImageUploader">Imageuploader</a></p>
+      <p><a href="https://github.com/mdahlke" class="avatar"><img src="https://0.gravatar.com/avatar/954a127b1d97fc86c514bf9e306bf390?d=https%3A%2F%2Fidenticons.github.com%2F565eb244692c36a36c72868a6b8e2178.png&amp;s=30" width="48" height="48"/></a> <a href="https://github.com/mdahlke">mdahlke</a> maintains <a href="https://github.com/mdahlke/ImageUploader">Imageuploader</a></p>
 
 
       </div>
