@@ -43,7 +43,9 @@
 
 <pre><code>&lt;?php
 if(isset($_POST['imageUpload'])){
-        $imageUploader = new UploadImage();
+    require 'classes/UploadImage.class.php';
+
+    $imageUploader = new UploadImage();
     $imageUploader-&gt;upload($_FILES['image']);
 
     if($imageUploader-&gt;getNumberOfErrorsDuringUpload() &gt; 0){
