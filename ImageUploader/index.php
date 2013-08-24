@@ -1,4 +1,5 @@
 <?php
+$uploadOutput = "";
 
 if(isset($_POST['submitForm'])){
 	require 'classes/UploadImage.class.php';
@@ -15,7 +16,14 @@ if(isset($_POST['submitForm'])){
 	}
 	
 	for($i = 0; $i < $imageUploader->getNumberOfSuccessfulUploads(); $i++){
-		echo '<img src="'.$imageUploader->getFilePathThumbAtIndex($i).$imageUploader->getFileNameThumbAtIndex($i).'"/>';
+		$uploadOutput .= '
+						<div class="imageWrapper">
+							<a href="'.$imageUploader->getFilePathFullAtIndex($i).
+									$imageUploader->getFileNameFullAtIndex($i).'">
+								<img src="'.$imageUploader->getFilePathSmallAtIndex($i).
+											$imageUploader->getFileNameSmallAtIndex($i).'"/>
+							</a>
+						</div>';
 	}
 }
 else if(isset($_POST['submitURL'])){
@@ -32,7 +40,12 @@ else if(isset($_POST['submitURL'])){
 	}
 	
 	for($i = 0; $i < $URLUploader->getNumberOfSuccessfulUploads(); $i++){
-		echo '<img src="'.$URLUploader->getFilePathThumbAtIndex($i).$URLUploader->getFileNameThumbAtIndex($i).'"/>';
+		$uploadOutput .= '
+						<a href="'.$URLUploader->getFilePathFullAtIndex($i).
+								   $URLUploader->getFileNameFullAtIndex($i).'">
+							<img src="'.$URLUploader->getFilePathSmallAtIndex($i).
+										$URLUploader->getFileNameSmallAtIndex($i).'"/>
+						</a>';
 	}
 
 }
@@ -57,12 +70,17 @@ else if(isset($_POST['submitAudio'])){
 	}
 	
 	for($i = 0; $i < $audioUploader->getNumberOfSuccessfulUploads(); $i++){
-		echo 
-			$audioUploader->getFileNameAtIndex($i)
-			."	<br />
-			<audio style='display:block;' controls src='".$audioUploader->getFilePathAtIndex($i).$audioUploader->getFileNameAtIndex($i)."' type='".$audioUploader->getFullFileTypeAtIndex($i)."'>
-				Your browser does not support HTML audio
-			</audio>
+		$uploadOutput .= "
+			<div class='audioWrapper'>"
+				.$audioUploader->getFileNameAtIndex($i)
+				."	<br />
+				<audio controls preload='none'
+					src='".$audioUploader->getFilePathAtIndex($i).
+						   $audioUploader->getFileNameAtIndex($i)."' 
+					type='".$audioUploader->getFullFileTypeAtIndex($i)."'>
+					Your browser does not support HTML audio
+				</audio>
+			</div>
 		";
 	}
 
@@ -70,42 +88,69 @@ else if(isset($_POST['submitAudio'])){
 
 ?>
 
-<!doctype html>
+<!DOCTYPE html>
 <head>
 	<title>Image Class Testing Script</title>
-</head>
-
+	<link href="css/layout.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-	<form action="" method="post" enctype="multipart/form-data">
-		<h3><label for="image">Select Image(s):</label></h3>
+	<article>
+		<h1 class="outline">PHP File Uploader</h1>
 		
-		<input type='file' name='image[]' multiple/>
-		
-		<input type="submit" name="submitForm" value="Upload"/>
-	</form>
-	
-	<hr />
-	
-	<form action="" method="post" enctype="multipart/form-data">
-		<h3><label for="image">Enter URL of image:</label></h3>
+		<form action="" method="post" enctype="multipart/form-data">
+			<h3 class="outline"><label for="image">Select Image(s):</label></h3>
 
-		<input type='url' name='url' placeholder="enter url"/>
-		
-		<input type="submit" name="submitURL" value="UploadURL"/>
-	</form>
-	
-	<hr />
-	
-	<form action="" method="post" enctype="multipart/form-data">
-		<h3><label for="image">Select Audio:</label></h3>
+			<input type="submit" name="submitForm" value="Upload Image(s)"/>
 
-		<input type='file' name='audio[]' multiple/>
-		<br />
-		<label>Create new directory (ex. audio/playlists/Eminem/)</label>
-		<input type="text" name="newDirectory" />
-		
-		<input type="submit" name="submitAudio" value="UploadAudio"/>
-	</form> 
+			<input type='file' name='image[]' multiple/>
+
+			<br />
+		</form>
+
+		<hr class="clear thinGrayHR" />
+
+		<form action="" method="post" enctype="multipart/form-data">
+			<h3 class="outline"><label for="image">Enter URL of image:</label></h3>
+			
+			<input type="submit" name="submitURL" value="Upload URL"/>
+
+			<input type='url' name='url' placeholder="Enter URL"/>
+		</form>
+
+		<hr class="clear thinGrayHR" />
+
+		<form action="" method="post" enctype="multipart/form-data">
+			<h3 class="outline"><label for="image">Select Audio:</label></h3>
+
+			<input type="submit" name="submitAudio" value="Upload Audio"/>
+
+			<input type='file' name='audio[]' multiple/>
+			<br />
+			<br />
+			<label>New directory (ex. audio/playlists/Eminem/)</label>
+			<br />
+			<input type="text" name="newDirectory" />
+			<br />
+			<small>(May be left blank for default upload location)</small>
+			<br />
+		</form> 
+	</article>
+	<article>
+	<?php
+		if(!empty($uploadOutput)){
+			echo "
+				<hr class='clear thinGrayHR' />
+				<div id='uploadOutput'>
+					<h2>Your uploaded file(s):</h2>
+					$uploadOutput
+				</div>
+			";
+		}
+	?>
+	</article>
+	<footer>
+		Created By: <a href="https://github.com/mdahlke" target="_blank">Michael Dahlke</a>
+	</footer>
 </body>
+</html>
