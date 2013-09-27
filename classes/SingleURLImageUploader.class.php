@@ -11,8 +11,42 @@
  * @author Michael
  */
 
-require ('ImageUploader.class.php');
-class SingleURLImageUploader extends ImageUploader {
+require ('UploadImage.class.php');
+
+class SingleURLImageUploader extends UploadImage {
+	
+//	/**
+//	 * OVERWRITE parent function
+//	 * 
+//	 * Check to make sure the file is an acceptable file for upload
+//	 * throw exception
+//	 * 
+//	 * @param string $fileType The file type of an image
+//	 * 
+//	 * @example 'image/jpeg'
+//	 * 
+//	 * @return boolean returns true/false
+//	 */
+//	protected function isAcceptableFileType($fileType){
+//		$fileCategory = $this->detectFileType($fileType);
+//		
+//		if($fileCategory == $this->getFileTypeForUpload()){
+//			foreach($this->allowedAudioTypes as $allowedType){
+//				if($fileType == $allowedType){
+//					return true;
+//				}
+//			}
+//		}
+//		else if($fileCategory == $this->getFileTypeForUpload()){
+//			foreach($this->allowedImageTypes as $allowedType){
+//				if($fileType == $allowedType){
+//					return true;
+//				}
+//			}
+//		}
+//		
+//		return false;
+//	}
 
 	public function uploadSingleURLImage($file){
 		
@@ -25,7 +59,7 @@ class SingleURLImageUploader extends ImageUploader {
 		$URLimageType = $image['mime'];
 
 		try {
-			if(!$this->isImage($URLimageType)){
+			if(!$this->isAcceptableFileType($URLimageType)){
 				throw new Exception($file . ' is not an image so it was not uploaded.',  1001);
 			}
 		}
@@ -40,22 +74,13 @@ class SingleURLImageUploader extends ImageUploader {
 			$continueWithUpload = false;
 		}
 
-		if($continueWithUpload){			
-			//$u = $this->getNumberOfSuccessfulUploads();
-			if($URLimageType == 'image/jpeg'){
-				$imageType = 'jpg';
-			}
-			else if($URLimageType == 'image/png'){
-				$imageType = 'png';
-			}
-			else if($URLimageType == 'image/gif'){
-				$imageType = 'gif';
-			}
+		if($continueWithUpload){
 
 			$uploadedFile = $file;
 
 			try {// Check image type and then create jpeg of it
 				if($URLimageType === 'image/jpg' || $URLimageType === 'image/jpeg' || $URLimageType === 'image/pjpeg') {
+					$imageType = 'jpg';
 					$src = imagecreatefromjpeg($uploadedFile);
 				}
 				else if($URLimageType === 'image/png'){
@@ -165,9 +190,9 @@ class SingleURLImageUploader extends ImageUploader {
 				$directorySmall = str_replace("full/", "small/", $newSubDirectory);				// To create a directory for the small images and thumb images
 				$directoryThumb = str_replace("full/", "thumbnail/", $newSubDirectory);			// I used the str_replace() function
 
-				mkdir($newSubDirectory."/", 0777);												// We then create the 3 new sub directories in their respective
-				mkdir($directorySmall."/", 0777);												// Parent directory and make the read/write
-				mkdir($directoryThumb."/", 0777);
+				mkdir($newSubDirectory."/", 0755);												// We then create the 3 new sub directories in their respective
+				mkdir($directorySmall."/", 0755);												// Parent directory and make the read/write
+				mkdir($directoryThumb."/", 0755);
 
 				$directoryFull = $newSubDirectory."/";
 			}
@@ -237,7 +262,7 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 				try {
-					if(!imagegif($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameSmallAtIndex(0))){
+					if(!imagegif($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameThumbAtIndex(0))){
 						throw new Exception('Could not create "imagegif". 
 											Filepath: '.$this->getFilePathFullAtIndex(0). ' or 
 											Filename: '.$this->getFileNameFullAtIndex(0).' does not exist.', 1003);
@@ -253,8 +278,8 @@ class SingleURLImageUploader extends ImageUploader {
 			else if($imageType === $this::PNG){
 
 				try {
-					if(!imagepng($tmp, $this->getFilePathFullAtIndex(0).$this->getFileNameFullAtIndex(0), $this->getThumbImageQuality($imageType))){
-						throw new Exception('Could not create "imagegif". 
+					if(!imagepng($tmp, $this->getFilePathFullAtIndex(0).$this->getFileNameFullAtIndex(0), $this->getFullImageQuality($imageType))){
+						throw new Exception('Could not create "imagepng". 
 											Filepath: '.$this->getFilePathFullAtIndex(0). ' or 
 											Filename: '.$this->getFileNameFullAtIndex(0).' does not exist.', 1003);
 					}
@@ -267,8 +292,8 @@ class SingleURLImageUploader extends ImageUploader {
 				}
 
 				try {
-					if(!imagepng($tmp1, $this->getFilePathSmallAtIndex(0).$this->getFileNameSmallAtIndex(0), $this->getThumbImageQuality($imageType))){
-						throw new Exception('Could not create "imagegif". 
+					if(!imagepng($tmp1, $this->getFilePathSmallAtIndex(0).$this->getFileNameSmallAtIndex(0), $this->getSmallImageQuality($imageType))){
+						throw new Exception('Could not create "imagepng". 
 											Filepath: '.$this->getFilePathFullAtIndex(0). ' or 
 											Filename: '.$this->getFileNameFullAtIndex(0).' does not exist.', 1003);
 					}
@@ -280,8 +305,8 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 				try {
-					if(!imagepng($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameSmallAtIndex(0), $this->getThumbImageQuality($imageType))){
-						throw new Exception('Could not create "imagegif". 
+					if(!imagepng($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameThumbAtIndex(0), $this->getThumbImageQuality($imageType))){
+						throw new Exception('Could not create "imagepng". 
 											Filepath: '.$this->getFilePathFullAtIndex(0). ' or 
 											Filename: '.$this->getFileNameFullAtIndex(0).' does not exist.', 1003);
 					}
@@ -296,7 +321,7 @@ class SingleURLImageUploader extends ImageUploader {
 			else if(($imageType === $this::GIF  || $imageType === $this::PNG) && !self::$allowGIFImages){
 				try {
 					if(!imagepng($tmp, $this->getFilePathFullAtIndex(0).$this->getFileNameFullAtIndex(0))){
-						throw new Exception('Could not create "imagegif". 
+						throw new Exception('Could not create "imagepng". 
 											Filepath: '.$this->getFilePathFullAtIndex(0). ' or 
 											Filename: '.$this->getFileNameFullAtIndex(0).' does not exist.', 1003);
 					}
@@ -310,7 +335,7 @@ class SingleURLImageUploader extends ImageUploader {
 
 				try {
 					if(!imagepng($tmp1, $this->getFilePathSmallAtIndex(0).$this->getFileNameSmallAtIndex(0))){
-						throw new Exception('Could not create "imagegif". 
+						throw new Exception('Could not create "imagepng". 
 											Filepath: '.$this->getFilePathFullAtIndex(0). ' or 
 											Filename: '.$this->getFileNameFullAtIndex(0).' does not exist.', 1003);
 					}
@@ -322,8 +347,8 @@ class SingleURLImageUploader extends ImageUploader {
 					$this->allUploadErrorsFileName[] = $e->getFile();
 				}
 				try {
-					if(!imagepng($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameSmallAtIndex(0))){
-						throw new Exception('Could not create "imagegif". 
+					if(!imagepng($tmp2, $this->getFilePathThumbAtIndex(0).$this->getFileNameThumbAtIndex(0))){
+						throw new Exception('Could not create "imagepng". 
 											Filepath: '.$this->getFilePathFullAtIndex(0). ' or 
 											Filename: '.$this->getFileNameFullAtIndex(0).' does not exist.', 1003);
 					}

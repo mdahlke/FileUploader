@@ -1,5 +1,46 @@
 <?php
-
+/**
+ * 
+ * UploadImage will create an object that will allow
+ * for easy implementation of uploading an image
+ * 
+ * This image uploader will allow for multiple images to be uploaded at once
+ * The uploader will also make two copies of the image (small, thumb)
+ *	that will be uploaded to their respective folder within the same parent folder
+ *	as the original image
+ *
+ *  IMPORTANT
+ *	- The <input> name must be an array even if there is one <input>
+ *		+ ex. <input type='file' name='image[]'/>
+ *	- You must set the originalFilePath unless 'images/full/' is your working
+ *		directory
+ *		+ the small & thumbnail directories will be set in accordance to your
+ *			full directory
+ *			+ ex. 
+ *				<?php
+ *					$imageUploader = new ImageUploader();
+ *					$imageUploader->setOriginalFilePath('images/uploaded/full');
+ *				?>
+ *				
+ *				after the uploadImage() function is called, the small and thumbnail
+ *				directories variables will be automatically set to...
+ *				'images/uploaded/small' && 'images/uploaded/thumb'
+ *	- The default maxUploadSize of an image is 5MB
+ *	- You may set a custom prependToFileName by calling the 
+ *		setPrependToFileName() function.
+ *		+ This will take whatever you set it to and prepend it to the filename
+ *			so you can better organize your photos
+ *	- If you are uploading more than one image then you can set the number of
+ *		uploading images by calling numberOfAllowedImagesToUpload();
+ *	- It is also possible to set the smallImage and the thumbImage desired height
+ *		and width using setSmallImageWidthAndHeight() and setThumbImageWidthAndHeight()
+ *		respectively
+ *		+ It's important to note that this script will ignore either the desired
+ *			height or width in order to maintain aspect ratio
+ *  - You may set the number of files allowed per directory (default: 100)
+ * 
+ * @author Michael Dahlke
+ */
 require ('ImageUploader.class.php');
 
 class UploadImage extends ImageUploader {
@@ -25,9 +66,9 @@ class UploadImage extends ImageUploader {
 			exit();
 		}
 		
-		for($i = 0; $i < $this->getNumberOfAllowedImagesToUpload(); $i++){
+		for($i = 0; $i < $this->getNumberOfAllowedFilesToUpload(); $i++){
 			
-			$continueWithUpload = $this->validateImage($file['name'][$i], $file['size'][$i], $file['type'][$i]);
+			$continueWithUpload = $this->validateFile($file['name'][$i], $file['size'][$i], $file['type'][$i]);
 			
 			if($continueWithUpload){			
 				$u = $this->getNumberOfSuccessfulUploads();
@@ -44,7 +85,7 @@ class UploadImage extends ImageUploader {
 					$src = imagecreatefrompng($uploadedFile);
 				}
 				else if($file['type'][$i] === 'image/gif') {
-					$imageType = 'gif';
+					$imageType = 'png';
 					$src = imagecreatefromgif($uploadedFile);
 				}
 
@@ -71,7 +112,6 @@ class UploadImage extends ImageUploader {
 				
 				if($imageWidth > $imageHeight){
 					$ratioOfDifference = $thumbWidth / $imageWidth;
-
 					$thumbImageWidth = $ratioOfDifference * $imageWidth;
 					$thumbImageHeight = $ratioOfDifference * $imageHeight;
 				}
@@ -131,9 +171,9 @@ class UploadImage extends ImageUploader {
 					$directorySmall = str_replace("full/", "small/", $newSubDirectory);				// To create a directory for the small images and thumb images
 					$directoryThumb = str_replace("full/", "thumbnail/", $newSubDirectory);			// I used the str_replace() function
 
-					mkdir($newSubDirectory."/", 0777);												// We then create the 3 new sub directories in their respective
-					mkdir($directorySmall."/", 0777);												// Parent directory and make the read/write
-					mkdir($directoryThumb."/", 0777);
+					mkdir($newSubDirectory."/", 0755);												// We then create the 3 new sub directories in their respective
+					mkdir($directorySmall."/", 0755);												// Parent directory and make the read/write
+					mkdir($directoryThumb."/", 0755);
 
 					$directoryFull = $newSubDirectory."/";
 				}
@@ -149,7 +189,6 @@ class UploadImage extends ImageUploader {
 				$this->setFilePathThumb($directoryThumb);
 
 				// Create a filename that won't be repeated
-				
 				$this->setFileNameFull($this->getPrependToFileName().md5(rand()).'.'.$imageType);
 				
 				$fullFileName = $this->getFileNameFullAtIndex($u);
@@ -158,7 +197,6 @@ class UploadImage extends ImageUploader {
 					$this->setFileNameSmall($smallImageWidth."x".$smallImageHeight."_".$fullFileName);
 				}
 				catch(Exception $e){
-					echo $e->getMessage();
 						$this->allUploadErrorMessages[] = $e->getMessage();
 						$this->allUploadErrorCodes[] = $e->getCode();
 						$this->allUploadErrorsLineNumber[] = $e->getLine();
@@ -168,7 +206,6 @@ class UploadImage extends ImageUploader {
 					$this->setFileNameThumb($thumbImageWidth."x".$thumbImageHeight."_".$fullFileName);
 				}
 				catch (Exception $e){
-					echo $e->getMessage();
 						$this->allUploadErrorMessages[] = $e->getMessage();
 						$this->allUploadErrorCodes[] = $e->getCode();
 						$this->allUploadErrorsLineNumber[] = $e->getLine();
@@ -176,7 +213,7 @@ class UploadImage extends ImageUploader {
 				}
 
 				// Send the Images to the correct place
-				if($imageType === $this::GIF){
+				if($imageType === $this::GIF && false){
 					try {
 						if(!imagegif($tmp, $this->getFilePathFullAtIndex($u).$this->getFileNameFullAtIndex($u))){
 							throw new Exception('Could not create "imagegif". 
@@ -192,7 +229,7 @@ class UploadImage extends ImageUploader {
 					}
 					
 					try {
-						if(!imagegif($tmp, $this->getFilePathSmallAtIndex($u).$this->getFileNameSmallAtIndex($u))){
+						if(!imagegif($tmp1, $this->getFilePathSmallAtIndex($u).$this->getFileNameSmallAtIndex($u))){
 							throw new Exception('Could not create "imagegif". 
 												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
 												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1003);
@@ -205,7 +242,7 @@ class UploadImage extends ImageUploader {
 						$this->allUploadErrorsFileName[] = $e->getFile();
 					}
 					try {
-						if(!imagegif($tmp, $this->getFilePathThumbAtIndex($u).$this->getFileNameSmallAtIndex($u))){
+						if(!imagegif($tmp2, $this->getFilePathThumbAtIndex($u).$this->getFileNameSmallAtIndex($u))){
 							throw new Exception('Could not create "imagegif". 
 												Filepath: '.$this->getFilePathFullAtIndex($u). ' or 
 												Filename: '.$this->getFileNameFullAtIndex($u).' does not exist.', 1003);
@@ -218,7 +255,7 @@ class UploadImage extends ImageUploader {
 						$this->allUploadErrorsFileName[] = $e->getFile();
 					}
 				}
-				elseif($imageType === $this::PNG){
+				elseif($imageType === $this::PNG || $imageType === $this::GIF){
 					try {
 						if(!imagepng($tmp, $this->getFilePathFullAtIndex($u).$this->getFileNameFullAtIndex($u), $this->getFullImageQuality($imageType))){
 							throw new Exception('Could not create "imagepng". 
