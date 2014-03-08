@@ -18,7 +18,8 @@ local.properties
 
 ImageUpload/
 nbproject/
-FileUploaderErrorLog.txts
+FileUploaderErrorLog.txt
+*~
 
 # External tool builders
 .externalToolBuilders/
