@@ -7,7 +7,7 @@ The main purpose of this script is to minimize the amount of coding you must to 
 
 Minimum code required to start uploading
 ```php
-require 'UploadImage.class.php
+require 'UploadImage.class.php';
 $img = new UploadImage( $_FILES['image'] );
 $img->upload();
 ```
