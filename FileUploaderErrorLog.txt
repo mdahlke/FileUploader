@@ -1,0 +1,1 @@
+Error 1001 on line 247 in /home/michael/Dropbox/Websites/FileUpload/classes/FileUploader.class.php :: marioland.xcf is not an image file so it was not uploaded.
