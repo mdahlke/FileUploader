@@ -6,7 +6,7 @@
  * @author Michael Dahlke
  */
 
-require ('DocumentUploader.class.php');
+require( __DIR__ . '/DocumentUploader.class.php');
 
 class UploadDocument extends DocumentUploader {
 	

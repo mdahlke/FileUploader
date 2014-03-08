@@ -10,8 +10,8 @@
  *
  * @author Michael
  */
-require 'FileUploader.class.php';
-require 'interfaces/iFileUpload.php';
+require( __DIR__ . '/FileUploader.class.php' );
+require( __DIR__ . '/../interfaces/iFileUpload.php' );
 
 class AudioUploader extends FileUploader implements iFileUpload {
 
@@ -24,7 +24,7 @@ class AudioUploader extends FileUploader implements iFileUpload {
 	protected $fileTypeForUpload = 'audio';
 	protected $maxUploadSize = 419430400;
 	protected $maxNumberOfUploadsPerUpload = 20;
-
+	
 	//private $numberOfFilesPerDirectory = 10;
 
 	/**

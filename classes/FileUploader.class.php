@@ -11,6 +11,7 @@ class FileUploader {
 
 	// Variables
 	protected $originalFilePath = 'upload/';
+	protected $inParentDirectory = false;
 	protected $prependToFileName = "";
 	protected $numberOfFilesPerDirectory = 100;
 	protected $numberOfAllowedFilesToUpload = 1;
@@ -38,7 +39,7 @@ class FileUploader {
 		'audio/mpg', 'audio/x-mpg', 'audio/x-mpegaudio',
 		'audio/wav', 'audio/x-wav', 'audio/ogg',
 		'audio/mp4', 'audio/mid', 'audio/x-aiff',
-		'audio/rmi'
+		'audio/rmi', 'audio/x-ms-wma', 'application/x-audacity-project'
 	);
 	protected $allowedImageTypes = array(
 		'image/png', 'image/jpeg',
@@ -62,6 +63,10 @@ class FileUploader {
 	 * I left it in the class
 	 */
 
+	public function dirName(){
+		echo  __DIR__ . '/';
+	}
+	
 	public function inParentDirectory($input = true) {
 		$this->inParentDirectory = $input;
 	}
@@ -165,7 +170,7 @@ class FileUploader {
 	protected function isAcceptableFileType($fileType) {
 		//$fileCategory = $this->detectFileType($fileType);
 		$fileCategory = $this->getFileTypeForUpload();
-
+		
 		if ($fileCategory == 'audio') {
 			if (in_array($fileType, $this->allowedAudioTypes)) {
 				return true;
@@ -238,6 +243,7 @@ class FileUploader {
 			} else {
 				try {
 					if (!$this->isAcceptableFileType($fileType)) {
+						echo $fileType;
 						throw new Exception($fileName . ' is not an ' . $this->fileTypeForUpload . ' file so it was not uploaded.', 1001);
 					} else {
 						try {

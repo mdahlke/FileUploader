@@ -8,8 +8,8 @@
  * @author Michael Dahlke <madahlke27@gmail.com>
  * 
  */
-require ('FileUploader.class.php');
-require ('interfaces/iFileUpload.php');
+require ( __DIR__ . '/FileUploader.class.php');
+require ( __DIR__ . '/../interfaces/iFileUpload.php');
 
 class DocumentUploader extends FileUploader implements iFileUpload {
 

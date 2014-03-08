@@ -11,7 +11,7 @@
  * @author Michael Dahlke <Michael.Dahlke at RummageCity.com>
  */
 
-require ('AudioUploader.class.php');
+require( __DIR__ . '/AudioUploader.class.php');
 
 class UploadAudio extends AudioUploader {
 
